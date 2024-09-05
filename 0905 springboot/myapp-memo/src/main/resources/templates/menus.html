@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Menu List</title>
+</head>
+<body>
+<h1>Menu List</h1>
+
+<!-- 메뉴 추가 폼 -->
+<form action="/menus" method="post">
+    <label for="title">제목</label>
+    <input type="text" id="title" name="title">
+    <br>
+    <label for="content">내용</label>
+    <input type="text" id="content" name="content">
+    <input type="submit" value="저장">
+</form>
+
+<!-- 메뉴 수정 폼 -->
+<form action="/menus/update" method="post">
+    <input type="hidden" id="edit-id" name="id">
+    <label for="edit-title">제목</label>
+    <input type="text" id="edit-title" name="title">
+    <br>
+    <label for="edit-content">내용</label>
+    <input type="text" id="edit-content" name="content">
+    <input type="submit" value="수정">
+</form>
+
+<ul>
+    <!-- 메뉴를 반복하여 출력 -->
+    <li th:each="item : ${menu}">
+        <span th:text="${item.title}">Title</span> -
+        <span th:text="${item.content}">Description</span>
+        <form action="/menus/delete" method="post" style="display:inline;">
+            <input type="hidden" name="id" th:value="${item.id}">
+            <input type="submit" value="삭제">
+        </form>
+        <button type="button" th:attr="data-id=${item.id}, data-title=${item.title}, data-content=${item.content}" onclick="editMenu(this)">
+            수정
+        </button>
+    </li>
+</ul>
+
+<script>
+    function editMenu(button) {
+        const id = button.getAttribute('data-id');
+        const title = button.getAttribute('data-title');
+        const content = button.getAttribute('data-content');
+        document.getElementById('edit-id').value = id;
+        document.getElementById('edit-title').value = title;
+        document.getElementById('edit-content').value = content;
+    }
+</script>
+</body>
+</html>
